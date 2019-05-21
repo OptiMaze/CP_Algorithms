@@ -1,46 +1,56 @@
 #include<bits/stdc++.h>
 using namespace std;
-const int maxn=1000000;
-vector<int> g[maxn];
-int indeg[maxn];
+
+
+#define fi first 
+#define se second
+#define mp make_pair
+#define forn(i,n) for(ll i=0;i<n;i++)
+#define sync ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+
+typedef long long ll;
+const ll maxn = 1e5+1;
+
 int main(){
-#ifndef ONLINE_JUDGE
+
+        #ifndef ONLINE_JUDGE
     // for getting input from input.txt
     freopen("input.txt", "r", stdin);
     // for writing output to output.txt
-    freopen("o.txt", "w", stdout);
-#endif
-int n,m;
-cin>>n>>m;
-multiset< pair<int,int> > pq;
-while(m--){
-    int x,y;
-    cin>>x>>y;
-    g[x].push_back(y);
-    indeg[y]++;
-}
-for(int i=1;i<=n;i++){
-    pq.insert(make_pair(indeg[i],i));
-}
-vector<int> topo;
-while(!pq.empty()){
-    pair<int,int> p=*pq.begin();
-    pq.erase(pq.begin());
-    if(p.first!=0){
-        cout<<"Impossible : Not DAG";
-        return 0;
-    }
-    topo.push_back(p.second);
-    for(auto it:g[p.second]){
-        auto iit=pq.find(make_pair(indeg[it],it));
-        pair<int,int> ph=*iit;
-        ph.first--;
-        indeg[ph.second]=ph.first;
-        pq.erase(iit);
-        pq.insert(ph);
-    }
-}
-for(auto it:topo){
-    cout<<it<<" ";
-}
+    freopen("output.txt", "w", stdout);
+        #endif
+        int n,m;
+        cin>>n>>m;
+        vector<int> g[n+1];
+        int store[n+1];
+        for(int i=1;i<=n;i++) store[i] = 0;
+        while(m--){
+            int x,y;
+            cin>>x>>y;
+            g[x].push_back(y);
+        }
+        set< int > que;
+        forn(i,n){
+            if(store[i+1]==0) que.insert(i+1);
+        }
+        int nodes = 0;
+        vector<int> topo;
+        while(!que.empty()){
+            nodes++;
+            int val = *que.begin();
+            topo.push_back(val);
+            que.erase(que.begin());
+            for(auto it:g[val]){
+                if(--store[it]==0) que.insert(it);
+            }
+        }
+        if(nodes!=n){
+            cout<<"DAG"<<endl;
+        }
+        else{
+            for(auto it:topo) cout<<it<<endl;
+        }
+        
+    return 0;
+
 }
