@@ -29,19 +29,19 @@ int main(){
             cin>>x>>y;
             g[x].push_back(y);
         }
-        set< int > que;
+        queue<int> que;
         forn(i,n){
-            if(store[i+1]==0) que.insert(i+1);
+            if(store[i+1]==0) que.push(i+1);
         }
         int nodes = 0;
         vector<int> topo;
-        while(!que.empty()){
+        while(!que.empty()){w
             nodes++;
-            int val = *que.begin();
+            int val = que.front();
             topo.push_back(val);
-            que.erase(que.begin());
+            que.pop();
             for(auto it:g[val]){
-                if(--store[it]==0) que.insert(it);
+                if(--store[it]==0) que.push(it);
             }
         }
         if(nodes!=n){
